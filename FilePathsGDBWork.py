@@ -4,14 +4,14 @@ while True:
     foldques = raw_input("Please input the full path to the folder that you want mapped.")
     if os.path.isdir(foldques):
         print (foldques +" will have its contents mapped.")
-        path  = foldques
+        basepath  = foldques
         break
     else:
         print("That is not a valid folder on this computer, please provide a valid input.")
 
 wb =xlwt.Workbook()
 ws = wb.add_sheet("File Structure")
-ws.write(0,16,path)
+ws.write(0,16,basepath)
 
 foldstyle = "font: bold on, color-index red"
 filestyle = "font: bold off, color-index green"
@@ -24,13 +24,12 @@ ws.write(2,16,"GREEN, UN-BOLDED TEXT DENOTES A FILE",filestyle)
 ws.write(3,16,"ORANGE, UNDERLINED TEXT DENOTES A GEOSPATIAL FILE",spatialstyle)
 rowcount = 1
 
-
-
-for root, dirs, files in os.walk(path):
+pathcount = sum(basepath.count(x) for x in ("//","\\"))
+for root, dirs, files in os.walk(basepath):
     if "recycle" in root.lower():
         pass
     else:
-        path = root.count("\\")-1
+        path = sum(root.count(x) for x in ("//","\\")) - pathcount
         arcpy.env.workspace = root
         ws.write(rowcount,path,os.path.basename(root),foldstyle)
         rowcount +=1
