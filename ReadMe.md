@@ -1,0 +1,1 @@
+These scripts are used to view the folder structure of some of the folders on a local computer.
